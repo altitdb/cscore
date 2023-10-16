@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <script defer src="../scripts/lineups.js"></script>
+  </head>
+  <body>
+    <section>
+      <h2>Lineups</h2>
+      <form class="lineups">
+        <div class="lineups__label">Type</div>
+        <div class="lineups__value">
+          <input type="radio" id="type" name="type" value="home" checked />
+          <label for="type">Home</label>
+
+          <input type="radio" id="type" name="type" value="away" />
+          <label for="type">Away</label>
+        </div>
+<!--         
+        <br />
+
+        <div class="lineups__label">Número</div>
+        <div class="lineups__value">
+          <input type="number" step="1" min="0" name="player-number" />
+        </div> -->
+
+        <br />
+        
+        <button type="submit" class="lineups__submit">Submit</button>
+        <button
+          id="refresh-display"
+          title="Clear display and re-recreate alarm UI"
+        >
+          Clear
+        </button>
+      </form>
+    </section>
+
+    <section class="col-2">
+      <section class="">
+        <pre class="lineups-display"></pre>
+
+        <h2>Lineups log</h2>
+        <pre class="lineups-log"></pre>
+      </section>
+    </section>
+  </body>
+</html>
