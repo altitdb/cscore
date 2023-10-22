@@ -78,11 +78,41 @@ def calculate_probability_position(limit, row):
     raise Exception(row)
 
 
+def calculate_probability_gte80(limit, row):
+    if row[f'Probability_{limit}'] >= 80:
+        return 1
+    return 0
+
+
+def calculate_position_win(limit, row):
+    if row['Position'] <= limit:
+        return 1
+    elif row['Position'] > limit:
+        return 0
+    raise Exception(row)
+
+
 df['Position'] = df.apply(lambda row: calculate_position(row), axis=1)
+
 df['Probability_5'] = df.apply(lambda row: calculate_probability_position(5, row), axis=1)
 df['Probability_6'] = df.apply(lambda row: calculate_probability_position(6, row), axis=1)
 df['Probability_7'] = df.apply(lambda row: calculate_probability_position(7, row), axis=1)
 df['Probability_8'] = df.apply(lambda row: calculate_probability_position(8, row), axis=1)
 df['Probability_9'] = df.apply(lambda row: calculate_probability_position(9, row), axis=1)
 df['Probability_10'] = df.apply(lambda row: calculate_probability_position(10, row), axis=1)
+
+df['Probability_5_gte80'] = df.apply(lambda row: calculate_probability_gte80(5, row), axis=1)
+df['Probability_6_gte80'] = df.apply(lambda row: calculate_probability_gte80(6, row), axis=1)
+df['Probability_7_gte80'] = df.apply(lambda row: calculate_probability_gte80(7, row), axis=1)
+df['Probability_8_gte80'] = df.apply(lambda row: calculate_probability_gte80(8, row), axis=1)
+df['Probability_9_gte80'] = df.apply(lambda row: calculate_probability_gte80(9, row), axis=1)
+df['Probability_10_gte80'] = df.apply(lambda row: calculate_probability_gte80(10, row), axis=1)
+
+df['Position_5_win'] = df.apply(lambda row: calculate_position_win(5, row), axis=1)
+df['Position_6_win'] = df.apply(lambda row: calculate_position_win(6, row), axis=1)
+df['Position_7_win'] = df.apply(lambda row: calculate_position_win(7, row), axis=1)
+df['Position_8_win'] = df.apply(lambda row: calculate_position_win(8, row), axis=1)
+df['Position_9_win'] = df.apply(lambda row: calculate_position_win(9, row), axis=1)
+df['Position_10_win'] = df.apply(lambda row: calculate_position_win(10, row), axis=1)
+
 df.to_csv('./datafiles/cscore.com.br.csv')
