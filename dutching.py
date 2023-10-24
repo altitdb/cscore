@@ -10,10 +10,8 @@ def calculate_dutching_gain(probabilidades, aposta_total):
     return apostas
 
 
-probabilidades_neutras = [6.8,6.4,12,32,8.4,6.2,11,30,19.5,14,21,60,60,50,75,180,8.8,7.8,130]
-probabilidades_neutras = [6.8]
-probabilidades_valor = [6.8,6.4,12,32,8.4,6.2,11,30,19.5,14,21,60,60,50,75,180,8.8,7.8,130]
-probabilidades_valor = [6.4,11.5,9.2,6.6,11.5]
+probabilidades_neutras = [4.5]
+probabilidades_valor = [6.4,5.2,8,24,11,18.5,21]
 stake = 50
 
 apostas_neutras = calculate_dutching_gain(probabilidades_neutras, stake)
@@ -37,5 +35,5 @@ print('Expected profit')
 expected_profit = 0
 for i, aposta in enumerate(apostas):
     expected_profit += (probabilidades_valor[i] * aposta)
-profit = expected_profit / len(apostas) - 100
+profit = (expected_profit / (len(apostas) + 1)) - 100
 print(f"Profit {profit:.2f}")
