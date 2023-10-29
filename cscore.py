@@ -7,6 +7,7 @@ desired_width=4080
 pd.set_option('display.width', desired_width)
 np.set_printoptions(linewidth=desired_width)
 pd.set_option('display.max_columns', 100)
+pd.set_option('display.max_rows', None)
 pd.options.display.float_format = '{:,.2f}'.format
 
 STAKE = 50
@@ -14,13 +15,19 @@ STAKE = 50
 dfs = []
 for root, dirs, files in os.walk(r'./datafiles'):
     for name in sorted(files):
-        if name.startswith('cscore.com.br.csv'):
+        if name.startswith('cscore.com.br-'):
             filename = f'./datafiles/{name}'
             print(f'Reading file {filename}')
             df = pd.read_csv(filename)
             dfs.append(df)
 
 df = pd.concat(dfs, ignore_index=True)
+
+print('Removendo jogos sem resultados concluídos')
+df = df.dropna()
+df = df.astype({'ScoreHome': int, 'ScoreAway': int})
+
+print(df)
 
 df['Scoreboard'] = df['ScoreHome'].astype(str) + 'x' + df['ScoreAway'].astype(str)
 df.loc[((df['ScoreHome'] > 3) & (df['ScoreHome'] > df['ScoreAway'])), 'Scoreboard'] = 'AOHW'
@@ -169,6 +176,7 @@ for index, summary in df_summary.iterrows():
     plt.title(f'Probabilidade com {index} placares')
     plt.savefig(f'graphs/probability-with-{index}-scores.png')
 
-df.to_csv('./datafiles/cscore.com.br.csv')
+print(f'Saving {len(df)} results')
+df.to_csv('./datafiles/cscore.com.br.csv', index=False)
 
 print(df_summary)
