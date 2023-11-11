@@ -10,8 +10,8 @@ def calculate_dutching_gain(probabilidades, aposta_total):
     return apostas
 
 
-probabilidades_neutras = [4.5]
-probabilidades_valor = [6.4,5.2,8,24,11,18.5,21]
+probabilidades_neutras = [4.5, 11]
+probabilidades_valor = [3.75,10.5,6,20]
 stake = 50
 
 apostas_neutras = calculate_dutching_gain(probabilidades_neutras, stake)
