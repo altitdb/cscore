@@ -1,6 +1,6 @@
 import pandas as pd
 
-data = pd.read_csv('./cscore.com.br.csv')
+data = pd.read_csv('cscore.com.br.csv')
 print(data)
 
 import streamlit as st
