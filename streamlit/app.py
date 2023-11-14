@@ -1,14 +1,13 @@
 import pandas as pd
+
+data = pd.read_csv('./cscore.com.br.csv')
+print(data)
+
 import streamlit as st
 from awesome_table import AwesomeTable
 from awesome_table.column import Column
 
-st.set_page_config(page_title='AwesomeTable by @caiofaar', page_icon='📊', layout='wide')
-st.title('Soccer Betfair Analytics')
+st.set_page_config(page_title='Soccer Betfair Analytics by @altitdb', page_icon='📊', layout='wide')
+st.title('Soccer Betfair Analytics by @altitdb')
 
-data = pd.read_csv('https://github.com/altitdb/cscore/blob/main/datafiles/cscore.com.br.csv?raw=true')
-
-AwesomeTable(data, columns=[
-    Column(name='Home', label='Home'),
-    Column(name='Away', label='Away'),
-])
+AwesomeTable(data, show_search=True, show_order=True)
