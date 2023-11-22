@@ -140,7 +140,7 @@ def calculate_position_probability_gte(row):
     probability_total = 0
     for index, result in enumerate(sorted_results):
         probability_total += result['value']
-        if probability_total >= 80:
+        if probability_total >= 80 or index == 18:
             return index + 1
     raise Exception(row)
 
@@ -256,21 +256,28 @@ for index, summary in df_summary.iterrows():
     plt.axhline(0, color='b')
     plt.savefig(f'graphs/probability-with-{index}-scores.png')
 
-print('Analysis by League')
-win = []
-for x in available_results:
-    probability_total_win = df[(df[f'Position_{x}_win'] == 1)].count()[f"Position_{x}_win"]
-    probability_total_loss = df[(df[f'Position_{x}_win'] == 0)].count()[f"Position_{x}_win"]
-    win.append([probability_total_win, probability_total_loss])
-df_summary = pd.DataFrame(win, index=available_results, columns=['Win', 'Loss'])
-df_summary['Percent'] = df_summary['Loss'] / df_summary['Win']
-df_summary['Min_Profit'] = df_summary['Percent'] * 1.065
-print(df_summary)
 
-for index, summary in df_summary.iterrows():
+print('Analysis by League')
+
+
+def summary_by_league(index, league):
+    win = []
+    probability_total_win = df[(df[f'League'] == league) & (df[f'Position_{index}_win'] == 1)].count()[
+        f"Position_{index}_win"]
+    probability_total_loss = df[(df[f'League'] == league) & (df[f'Position_{index}_win'] == 0)].count()[
+        f"Position_{index}_win"]
+    win.append([probability_total_win, probability_total_loss])
+    df_summary = pd.DataFrame(win, index=[index], columns=['Win', 'Loss'])
+    df_summary['Percent'] = df_summary['Loss'] / df_summary['Win']
+    df_summary['Min_Profit'] = df_summary['Percent'] * 1.065
+    print(df_summary)
+    return df_summary
+
+
+for index in available_results:
     df_analytics = df.copy()
     df_dates = df_x.copy()
-    df_analytics.drop(['Hour', 'Country', 'Home', 'Away', 'ScoreHome', 'ScoreAway',
+    df_analytics.drop(['Hour', 'Home', 'Away', 'ScoreHome', 'ScoreAway',
                        '0x0', '0x1', '0x2', '0x3', '1x0', '1x1', '1x2', '1x3', '2x0', '2x1', '2x2',
                        '2x3', '3x0', '3x1', '3x2', '3x3', 'AOAW', 'AOD', 'AOHW', 'Scoreboard',
                        'Score', 'Position_Win', 'Probability_5', 'Probability_6',
@@ -285,23 +292,29 @@ for index, summary in df_summary.iterrows():
     plt.figure(figsize=(60, 15))
 
     for league in leagues:
+        # summary = summary_by_league(index, league)
         group_by = ['Date']
-        df_analytics_league = df_analytics[df_analytics['League'] == league]
-        df_analytics_league.loc[(df_analytics_league[f'Position_{index}_win'] == 0), 'Profit'] = STAKE * -1
-        df_analytics_league.loc[(df_analytics_league[f'Position_{index}_win'] == 1), 'Profit'] = STAKE * summary['Min_Profit']
-        df_analytics_league = df_analytics_league.groupby(group_by, as_index=False)['Profit'].sum()
-        df_dates['Profit'] = 0
-        dates_without_duplicates = pd.concat([df_analytics_league, df_dates], ignore_index=True)['Date'].drop_duplicates(keep=False)
-        df_dates = df_dates[(df_dates['Date'].isin(dates_without_duplicates))]
-        df_analytics_league = pd.concat([df_analytics_league, df_dates], ignore_index=True)
-        df_analytics_league.sort_values(by='Date', inplace=True)
-        df_analytics_league.reset_index(drop=True, inplace=True)
-        df_analytics_league['Accumulate'] = df_analytics_league['Profit'].cumsum()
+        df_country = df_analytics[df_analytics['League'] == league]
+        countries = df_country['Country'].unique()
 
-        last_value = df_analytics_league['Accumulate'].iloc[-1]
-        if last_value > 0:
-            legend.append(league)
-            plt.plot(df_analytics_league['Date'], df_analytics_league['Accumulate'], label=league)
+        for country in countries:
+            df_analytics_league = df_analytics[(df_analytics['League'] == league) & (df_analytics['Country'] == country)]
+            df_analytics_league.loc[(df_analytics_league[f'Position_{index}_win'] == 0), 'Profit'] = STAKE * -1
+            df_analytics_league.loc[(df_analytics_league[f'Position_{index}_win'] == 1), 'Profit'] = STAKE * 0.38
+            df_analytics_league = df_analytics_league.groupby(group_by, as_index=False)['Profit'].sum()
+            df_dates = df_x.copy()
+            df_dates['Profit'] = 0
+            dates_without_duplicates = pd.concat([df_analytics_league, df_dates], ignore_index=True)['Date'].drop_duplicates(keep=False)
+            df_dates = df_dates[(df_dates['Date'].isin(dates_without_duplicates))]
+            df_analytics_league = pd.concat([df_analytics_league, df_dates], ignore_index=True)
+            df_analytics_league.sort_values(by='Date', inplace=True)
+            df_analytics_league.reset_index(drop=True, inplace=True)
+            df_analytics_league['Accumulate'] = df_analytics_league['Profit'].cumsum()
+
+            last_value = df_analytics_league['Accumulate'].iloc[-1]
+            if last_value > -50:
+                legend.append(f'{league} - {country}')
+                plt.plot(df_analytics_league['Date'], df_analytics_league['Accumulate'], label=league)
 
     plt.legend(legend)
     plt.title(f'Probabilidade com {index} placares')
