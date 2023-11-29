@@ -1,6 +1,5 @@
-import numpy as np
 import pandas as pd
-
+from datetime import datetime, timedelta
 
 def convert_case(value):
     if isinstance(value, str):
@@ -15,7 +14,12 @@ print(f"[BEFORE] Total de times: {len(df_database)}")
 df_aux = df_database['BETFAIR'].dropna()
 print(f"Missing teams {len(df_database) - len(df_aux)}")
 print(f"Missing teams: {df_database[df_database['BETFAIR'].isna()]}")
-df = pd.read_csv('./datafiles/cscore.com.br.csv')
+df_cscore = pd.read_csv('./datafiles/cscore.com.br.csv')
+today = datetime.now().strftime('%Y%m%d')
+tomorrow = (datetime.now() + timedelta(days=1)).strftime('%Y%m%d')
+df_today = pd.read_csv(f'./datafiles/cscore.com.br-{today}.csv')
+df_tomorrow = pd.read_csv(f'./datafiles/cscore.com.br-{tomorrow}.csv')
+df = pd.concat([df_cscore, df_today, df_tomorrow])
 df['Home'] = df['Home'].apply(lambda x: str(x).upper())
 df['Away'] = df['Away'].apply(lambda x: str(x).upper())
 df_teams = pd.DataFrame()
