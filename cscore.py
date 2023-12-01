@@ -17,7 +17,7 @@ dfs = []
 for root, dirs, files in os.walk(r'./datafiles'):
     for name in sorted(files):
         if name.startswith('cscore.com.br-'):
-            filename = f'./datafiles/{name}'
+            filename = f'{root}/{name}'
             print(f'Reading file {filename}')
             df = pd.read_csv(filename)
             dfs.append(df)
@@ -171,6 +171,7 @@ df['Position_7_win'] = df.apply(lambda row: calculate_position_win_by_limit(row,
 df['Position_8_win'] = df.apply(lambda row: calculate_position_win_by_limit(row, 8), axis=1)
 
 print(f'Saving {len(df)} results')
+df.sort_values(by=['Date', 'Hour'], inplace=True)
 df.to_csv('./datafiles/cscore.com.br.csv', index=False)
 
 start_date = datetime(2023, 10, 1)
