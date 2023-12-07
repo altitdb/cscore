@@ -34,6 +34,16 @@ df.loc[((df['ScoreAway'] > 3) & (df['ScoreAway'] > df['ScoreHome'])), 'Scoreboar
 df.loc[((df['ScoreHome'] > 3) & (df['ScoreAway'] > 3) & (df['ScoreHome'] == df['ScoreAway'])), 'Scoreboard'] = 'AOD'
 
 
+def format_hour(value):
+    values = value.split(':')
+    if len(values) == 2:
+        return value
+    return f'{values[0]}:{values[1]}'
+
+
+df['Hour'] = df['Hour'].apply(lambda value: format_hour(value))
+
+
 def calculate_position_win(row):
     results = []
     results.append({'name': '0x0', 'value': row['0x0']})
