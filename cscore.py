@@ -208,7 +208,7 @@ print(df_summary)
 
 for index, summary in df_summary.iterrows():
     df_analytics = df.copy()
-    df_analytics = df_analytics[df_analytics['Date'] == '2023-11-25']
+    df_analytics = df_analytics[(df_analytics['Date'] >= '2023-12-01') & (df_analytics['Date'] <= '2023-12-10')]
     df_analytics.drop(['Hour', 'Country', 'League', 'Home', 'Away', 'ScoreHome', 'ScoreAway',
                        '0x0', '0x1', '0x2', '0x3', '1x0', '1x1', '1x2', '1x3', '2x0', '2x1', '2x2',
                        '2x3', '3x0', '3x1', '3x2', '3x3', 'AOAW', 'AOD', 'AOHW', 'Scoreboard',
