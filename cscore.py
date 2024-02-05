@@ -73,7 +73,7 @@ def calculate_position_win(row):
     raise Exception(row)
 
 
-def calculate_probability_position(limit, row):
+def calculate_Score_Order(limit, row):
     results = []
     results.append({'name': '0x0', 'value': row['0x0']})
     results.append({'name': '0x1', 'value': row['0x1']})
@@ -161,14 +161,40 @@ def calculate_position_probability_gte_win(row):
     return 0
 
 
+
+def calculate_position_order(row, position):
+    results = []
+    results.append({'name': '0x0', 'value': row['0x0']})
+    results.append({'name': '0x1', 'value': row['0x1']})
+    results.append({'name': '0x2', 'value': row['0x2']})
+    results.append({'name': '0x3', 'value': row['0x3']})
+    results.append({'name': '1x0', 'value': row['1x0']})
+    results.append({'name': '1x1', 'value': row['1x1']})
+    results.append({'name': '1x2', 'value': row['1x2']})
+    results.append({'name': '1x3', 'value': row['1x3']})
+    results.append({'name': '2x0', 'value': row['2x0']})
+    results.append({'name': '2x1', 'value': row['2x1']})
+    results.append({'name': '2x2', 'value': row['2x2']})
+    results.append({'name': '2x3', 'value': row['2x3']})
+    results.append({'name': '3x0', 'value': row['3x0']})
+    results.append({'name': '3x1', 'value': row['3x1']})
+    results.append({'name': '3x2', 'value': row['3x2']})
+    results.append({'name': '3x3', 'value': row['3x3']})
+    results.append({'name': 'AOAW', 'value': row['AOAW']})
+    results.append({'name': 'AOD', 'value': row['AOD']})
+    results.append({'name': 'AOHW', 'value': row['AOHW']})
+    sorted_results = sorted(results, key=lambda x: x['value'], reverse=True)
+    return sorted_results[position - 1]['name']
+
+
 df['Position_Win'] = df.apply(lambda row: calculate_position_win(row), axis=1)
 df['Position_Probability_gte80'] = df.apply(lambda row: calculate_position_probability_gte(row), axis=1)
 df['Position_Probability_gte80_Win'] = df.apply(lambda row: calculate_position_probability_gte_win(row), axis=1)
 
-df['Probability_5'] = df.apply(lambda row: calculate_probability_position(5, row), axis=1)
-df['Probability_6'] = df.apply(lambda row: calculate_probability_position(6, row), axis=1)
-df['Probability_7'] = df.apply(lambda row: calculate_probability_position(7, row), axis=1)
-df['Probability_8'] = df.apply(lambda row: calculate_probability_position(8, row), axis=1)
+df['Probability_5'] = df.apply(lambda row: calculate_Score_Order(5, row), axis=1)
+df['Probability_6'] = df.apply(lambda row: calculate_Score_Order(6, row), axis=1)
+df['Probability_7'] = df.apply(lambda row: calculate_Score_Order(7, row), axis=1)
+df['Probability_8'] = df.apply(lambda row: calculate_Score_Order(8, row), axis=1)
 
 df['Probability_5_gte80'] = df.apply(lambda row: calculate_probability_gte80(5, row), axis=1)
 df['Probability_6_gte80'] = df.apply(lambda row: calculate_probability_gte80(6, row), axis=1)
@@ -179,6 +205,35 @@ df['Position_5_win'] = df.apply(lambda row: calculate_position_win_by_limit(row,
 df['Position_6_win'] = df.apply(lambda row: calculate_position_win_by_limit(row, 6), axis=1)
 df['Position_7_win'] = df.apply(lambda row: calculate_position_win_by_limit(row, 7), axis=1)
 df['Position_8_win'] = df.apply(lambda row: calculate_position_win_by_limit(row, 8), axis=1)
+
+df['Score_Order_1'] = df.apply(lambda row: calculate_position_order(row, 1), axis=1)
+df['Score_Order_2'] = df.apply(lambda row: calculate_position_order(row, 2), axis=1)
+df['Score_Order_3'] = df.apply(lambda row: calculate_position_order(row, 3), axis=1)
+df['Score_Order_4'] = df.apply(lambda row: calculate_position_order(row, 4), axis=1)
+df['Score_Order_5'] = df.apply(lambda row: calculate_position_order(row, 5), axis=1)
+df['Score_Order_6'] = df.apply(lambda row: calculate_position_order(row, 6), axis=1)
+df['Score_Order_7'] = df.apply(lambda row: calculate_position_order(row, 7), axis=1)
+df['Score_Order_8'] = df.apply(lambda row: calculate_position_order(row, 8), axis=1)
+df['Score_Order_9'] = df.apply(lambda row: calculate_position_order(row, 9), axis=1)
+df['Score_Order_10'] = df.apply(lambda row: calculate_position_order(row, 10), axis=1)
+df['Score_Order_11'] = df.apply(lambda row: calculate_position_order(row, 11), axis=1)
+df['Score_Order_12'] = df.apply(lambda row: calculate_position_order(row, 12), axis=1)
+df['Score_Order_13'] = df.apply(lambda row: calculate_position_order(row, 13), axis=1)
+df['Score_Order_14'] = df.apply(lambda row: calculate_position_order(row, 14), axis=1)
+df['Score_Order_15'] = df.apply(lambda row: calculate_position_order(row, 15), axis=1)
+df['Score_Order_16'] = df.apply(lambda row: calculate_position_order(row, 16), axis=1)
+df['Score_Order_17'] = df.apply(lambda row: calculate_position_order(row, 17), axis=1)
+df['Score_Order_18'] = df.apply(lambda row: calculate_position_order(row, 18), axis=1)
+df['Score_Order_19'] = df.apply(lambda row: calculate_position_order(row, 19), axis=1)
+
+df_backtest = df.copy()
+df_backtest = df_backtest[df_backtest['Score_Order_1'] == 'AOHW']
+print(f'Total: {len(df_backtest)}')
+print(f"Total first: {len(df_backtest[df_backtest['Position_Win'] == 1])}")
+print(f"Total <= 5: {len(df_backtest[df_backtest['Position_Win'] <= 5])}")
+print(f"Total <= 6: {len(df_backtest[df_backtest['Position_Win'] <= 6])}")
+print(f"Total <= 7: {len(df_backtest[df_backtest['Position_Win'] <= 7])}")
+print(f"Total <= 8: {len(df_backtest[df_backtest['Position_Win'] <= 8])}")
 
 print(f'Saving {len(df)} results')
 df.sort_values(by=['Date', 'Hour'], inplace=True)
