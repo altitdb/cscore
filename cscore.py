@@ -261,9 +261,11 @@ df_summary['Percent'] = df_summary['Loss'] / df_summary['Win']
 df_summary['Min_Profit'] = df_summary['Percent'] * 1.065
 print(df_summary)
 
+data_inicial = '2024-01-01'
+data_final = '2024-01-31'
 for index, summary in df_summary.iterrows():
     df_analytics = df.copy()
-    df_analytics = df_analytics[(df_analytics['Date'] >= '2023-12-01') & (df_analytics['Date'] <= '2023-12-10')]
+    df_analytics = df_analytics[(df_analytics['Date'] >= data_inicial) & (df_analytics['Date'] <= data_final)]
     df_analytics.drop(['Hour', 'Country', 'League', 'Home', 'Away', 'ScoreHome', 'ScoreAway',
                        '0x0', '0x1', '0x2', '0x3', '1x0', '1x1', '1x2', '1x3', '2x0', '2x1', '2x2',
                        '2x3', '3x0', '3x1', '3x2', '3x3', 'AOAW', 'AOD', 'AOHW', 'Scoreboard',
@@ -284,7 +286,7 @@ for index, summary in df_summary.iterrows():
     print(df_analytics)
 
     df_analytics.plot(x='Date', y='Accumulate', style='-o')
-    plt.title(f'Probabilidade com {index} placares')
+    plt.title(f'Probabilidade com {index} placares - De {data_inicial} até {data_final}')
     plt.axhline(0, color='b')
     plt.savefig(f'graphs/probability-until-80-with-{index}-scores.png')
 
@@ -300,6 +302,7 @@ print(df_summary)
 
 for index, summary in df_summary.iterrows():
     df_analytics = df.copy()
+    df_analytics = df_analytics[(df_analytics['Date'] >= data_inicial) & (df_analytics['Date'] <= data_final)]
     df_analytics.drop(['Hour', 'Country', 'League', 'Home', 'Away', 'ScoreHome', 'ScoreAway',
                        '0x0', '0x1', '0x2', '0x3', '1x0', '1x1', '1x2', '1x3', '2x0', '2x1', '2x2',
                        '2x3', '3x0', '3x1', '3x2', '3x3', 'AOAW', 'AOD', 'AOHW', 'Scoreboard',
@@ -319,7 +322,7 @@ for index, summary in df_summary.iterrows():
     print(df_analytics)
 
     df_analytics.plot(x='Date', y='Accumulate', style='-o')
-    plt.title(f'Probabilidade com {index} placares')
+    plt.title(f'Probabilidade com {index} placares - De {data_inicial} até {data_final}')
     plt.axhline(0, color='b')
     plt.savefig(f'graphs/probability-with-{index}-scores.png')
 
