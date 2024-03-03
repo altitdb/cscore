@@ -293,8 +293,8 @@ df_summary['Percent'] = df_summary['Loss'] / df_summary['Win']
 df_summary['Min_Profit'] = df_summary['Percent'] * 1.065
 print(df_summary)
 
-data_inicial = '2024-01-01'
-data_final = '2024-01-31'
+data_inicial = '2024-03-01'
+data_final = '2024-03-31'
 for index, summary in df_summary.iterrows():
     df_analytics = df.copy()
     df_analytics = df_analytics[(df_analytics['Date'] >= data_inicial) & (df_analytics['Date'] <= data_final)]
