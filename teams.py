@@ -1,6 +1,7 @@
 import pandas as pd
 from datetime import datetime, timedelta
 
+
 def convert_case(value):
     if isinstance(value, str):
         return str(value).upper()
