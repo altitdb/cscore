@@ -293,8 +293,8 @@ df_summary['Percent'] = df_summary['Loss'] / df_summary['Win']
 df_summary['Min_Profit'] = df_summary['Percent'] * 1.065
 print(df_summary)
 
-data_inicial = '2024-03-01'
-data_final = '2024-03-31'
+data_inicial = '2024-02-01'
+data_final = '2024-02-31'
 for index, summary in df_summary.iterrows():
     df_analytics = df.copy()
     df_analytics = df_analytics[(df_analytics['Date'] >= data_inicial) & (df_analytics['Date'] <= data_final)]
@@ -414,7 +414,7 @@ for index in available_results:
             df_analytics_league['Accumulate'] = df_analytics_league['Profit'].cumsum()
 
             last_value = df_analytics_league['Accumulate'].iloc[-1]
-            if last_value > -50:
+            if last_value > 0:
                 legend.append(f'{league} - {country}')
                 plt.plot(df_analytics_league['Date'], df_analytics_league['Accumulate'], label=league)
 
